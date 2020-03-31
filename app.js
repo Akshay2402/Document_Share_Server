@@ -7,6 +7,7 @@ const logger = require('morgan');
 const createError = require('http-errors');
 const apiRoutes = require('./routes/api');
 const mongoose = require("./config/db_main");
+require("./models/index");
 
 app.use(logger('dev'));
 app.use(helmet());
