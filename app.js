@@ -6,6 +6,7 @@ const app = express();
 const logger = require('morgan');
 const createError = require('http-errors');
 const apiRoutes = require('./routes/api');
+const mongoose = require("./config/db_main");
 
 app.use(logger('dev'));
 app.use(helmet());
@@ -35,7 +36,10 @@ process.on('SIGTERM', graceful);
 process.on('SIGINT', graceful);
 
 function graceful() {
-    process.exit(0);
+    mongoose.connection.close(() => {
+        console.log('Closed Mongoose Connections!');  
+        process.exit(0);
+    });
 }
 
 module.exports = app;
