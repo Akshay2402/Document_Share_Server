@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const logger = require('morgan');
 const createError = require('http-errors');
+const apiRoutes = require('./routes/api');
 
 app.use(logger('dev'));
 app.use(helmet());
@@ -12,9 +13,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res, next) => {
-    res.json("Smooth and Awesome!");
-});
+apiRoutes.includeRoutes(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
