@@ -3,7 +3,7 @@ mongoose.set('useCreateIndex', true);
 
 async function connect() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/docsharer', { useNewUrlParser: true, useUnifiedTopology: true })
+        await mongoose.connect(`mongodb://${process.env.BASE_DB_URI}/${process.env.MAIN_DB_NAME}`, { useNewUrlParser: true, useUnifiedTopology: true })
     } catch (error) {
         throw error;
     }

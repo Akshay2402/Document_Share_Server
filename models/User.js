@@ -21,12 +21,20 @@ const UserSchema = new mongoose.Schema({
             message: "{VALUE} is not a valid Email. for ex- someone@domain.com"
         }
     },
+    password: {
+        type: String,
+        select: false
+    },
+    otp: {
+        type: Number
+    },
     is_online: {
         type: Boolean,
         default: false
     },
     last_seen_at: {
-        type: Date
+        type: Date,
+        default: new Date()
     }
 }, {timestamps: true});
 
