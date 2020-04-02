@@ -4,7 +4,7 @@
   "description": "A simple API to support the Doc sharer web app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./bin/www"
+    "start": "pm2-runtime start ecosystem.config.js --env production"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
     "nodemailer": "^6.4.6",
+    "pm2": "^4.2.3",
     "winston": "^2.3.1",
     "winston-mongodb": "^2.0.8"
   }

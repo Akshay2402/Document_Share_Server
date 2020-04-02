@@ -7,6 +7,7 @@ const createError = require('http-errors');
 const apiRoutes = require('./routes/api');
 const mongoose = require("./config/db_main");
 const winston = require('./config/logger');
+const morgan = require('morgan');
 
 require("./models/index");
 
@@ -14,6 +15,7 @@ app.use(helmet());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(morgan("dev"));
 
 apiRoutes.includeRoutes(app);
 
