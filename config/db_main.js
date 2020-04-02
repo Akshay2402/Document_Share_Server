@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
 
 async function connect() {
-    try {
-        await mongoose.connect(`mongodb://${process.env.BASE_DB_URI}/${process.env.MAIN_DB_NAME}`, { useNewUrlParser: true, useUnifiedTopology: true })
+    try { 
+        // await mongoose.connect(`mongodb://${process.env.BASE_DB_URI}/${process.env.MAIN_DB_NAME}`, { useNewUrlParser: true, useUnifiedTopology: true })
+        await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     } catch (error) {
         throw error;
     }

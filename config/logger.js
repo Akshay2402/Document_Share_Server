@@ -29,7 +29,8 @@ const errorFileTransport = new (winston.transports.File)({
 });
 
 const errorMongoTransport = new (winston.transports.MongoDB)({
-    db: `mongodb://${process.env.BASE_DB_URI}/${process.env.LOGS_DB_NAME}`,
+    // db: `mongodb://${process.env.BASE_DB_URI}/${process.env.LOGS_DB_NAME}`,
+    db: process.env.MONGOLAB_SILVER_URI,
     level: 'debug',
     collection: 'commonerrors',
     name: 'common',
