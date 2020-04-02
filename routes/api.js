@@ -4,6 +4,18 @@ api.includeRoutes = function (app) {
     const documents = require('./document');
     const authentication = require('./authentication');
 
+
+    function isAuthenticated(req, res, next) {
+        if (!req.tokenVerified) {
+            return next({
+                status: 401,
+                message: "Unauthenticated"
+            });
+        } else {
+            return next();
+        }
+    }
+
     /**
      * Open Routes
      */
@@ -13,7 +25,8 @@ api.includeRoutes = function (app) {
     /**
      * Protected Routes
      */
-    app.use('/document', documents);
+    app.use('/api/v1/*', isAuthenticated);
+    app.use('/api/v1/document', documents);
 };
 
 module.exports = api;

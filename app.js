@@ -33,6 +33,13 @@ app.use((req, res, next) => {
 
 apiRoutes.includeRoutes(app);
 
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  const err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
 
 // error handler
 app.use(winston.exceptionMiddleware);
@@ -40,7 +47,6 @@ app.use(winston.exceptionMiddleware);
 app.use(function (err, req, res, next) {
     let errorObj = {
       app: "Document_Sharer",
-      head: err.head,
       message: err.message
     };
     res.status(err.status || 500).json(errorObj);
