@@ -39,7 +39,7 @@ function constructMailPayload(username, type, meta) {
             text: [
               `Dear ${username},`,
               `Greetings from Document Sharer`,
-              `your one time passsword for your Account is ${meta.otp}.`,
+              `your one time passsword for your Account is ${meta.otp.otp}.`,
               `Please Enter this OTP to complete your regestration.`,
               `This OTP valids upto 15 minutes.`,
               `This is Secret, Please Dont share with others.`,

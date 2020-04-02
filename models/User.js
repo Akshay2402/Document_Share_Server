@@ -1,32 +1,31 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt-nodejs');
 
 const UserSchema = new mongoose.Schema({
-    name: { 
-        type: String 
+    name: {
+        type: String,
+        required: true
     },
     email: {
         type: String,
         required: true,
-        sparse: true,
-        lowercase: true,
-        validate: {
-            validator: function (v) {
-                if (v == null || v == "") {
-                    return true;
-                } else {
-                    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    return re.test(v);
-                }
-            },
-            message: "{VALUE} is not a valid Email. for ex- someone@domain.com"
-        }
+        lowercase: true
     },
     password: {
         type: String,
+        required: true,
         select: false
     },
     otp: {
-        type: Number
+        type: {
+            otp: Number,
+            createdAt: Date
+        },
+        select: false
+    },
+    is_verified: {
+        type: Boolean,
+        default: false
     },
     is_online: {
         type: Boolean,
@@ -36,6 +35,38 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     }
-}, {timestamps: true});
+}, { timestamps: true });
+
+
+UserSchema.pre("save", function (next) {
+    var user = this;
+    if (!user.isModified("password")) {
+      return next();
+    }
+    bcrypt.genSalt(5, function (err, salt) {
+      if (err) {
+        return next(err);
+      }
+  
+      bcrypt.hash(user.password, salt, "", function (err, hash) {
+        if (err) {
+          return next(err);
+        }
+        user.password = hash;
+        next();
+      });
+    });
+  });
+  
+  UserSchema.methods.authenticate = function (password) {
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(password, this.password, (err, isMatch) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(isMatch);
+        });
+    });
+};
 
 module.exports = { UserSchema };
