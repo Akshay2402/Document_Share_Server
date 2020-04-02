@@ -2,7 +2,8 @@
   "name": "document_share_server",
   "version": "1.0.0",
   "engines": {
-    "node": "10.0.0"
+    "node": "10.x",
+    "npm": "6.x"
   },
   "description": "A simple API to support the Doc sharer web app",
   "scripts": {
