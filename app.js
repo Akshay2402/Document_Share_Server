@@ -8,6 +8,7 @@ const apiRoutes = require('./routes/api');
 const mongoose = require("./config/db_main");
 const winston = require('./config/logger');
 const morgan = require('morgan');
+const TokenService = require('./helpers/tokenService');
 
 require("./models/index");
 
@@ -17,12 +18,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 
+app.use((req, res, next) => {
+  const token = new TokenService(req.headers);
+  req.tokenVerified = token.isAuthenticated();
+  req.tokenPayload = token.getPayload();
+  req.user = {
+    _id: req.tokenPayload._id,
+    email: req.tokenPayload.email,
+    name: req.tokenPayload.name,
+    is_verified: req.tokenPayload.is_verified
+  };
+  next();
+});
+
 apiRoutes.includeRoutes(app);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(createError(404));
-});
 
 // error handler
 app.use(winston.exceptionMiddleware);

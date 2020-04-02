@@ -44,6 +44,11 @@ class TokenService {
             this.validToken = false;
         }
     }
+    _extractTokenFromHeaders(headers){
+        if(!headers || !headers.authorization) return false;
+        ////console.log(headers.authorization);
+        return headers.authorization.replace('Bearer ', '');
+    }
 }
 
 module.exports = TokenService;
