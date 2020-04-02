@@ -1,6 +1,9 @@
 {
   "name": "document_share_server",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.0.0"
+  }
   "description": "A simple API to support the Doc sharer web app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
