@@ -1,7 +1,6 @@
 module.exports = {
     apps: [{
         "name": "Document Sharer",
-        "interpreter" : "node@10.0.0",
         "script": "./bin/www",
         "watch": false,
         "ignore_watch": [
