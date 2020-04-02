@@ -31,7 +31,7 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
-router.post('/resend_otp', async (req, res, next) => {
+router.post(['/resend_otp', '/forgot_password'], async (req, res, next) => {
     try {
         if (!req.body.email) {
             throw { status: 400, message: 'Missing email!' };
@@ -40,7 +40,7 @@ router.post('/resend_otp', async (req, res, next) => {
         if (!user) {
             throw { status: 400, message: 'User Not Found!' };
         }
-        if (user.is_verified) {
+        if (user.is_verified && req.path !== '/forgot_password') {
             throw { status: 400, message: 'User is Already Verified!' };
         }
         const otp = Math.floor(100000 + Math.random() * 900000);
@@ -117,6 +117,34 @@ router.post('/register', async (req, res, next) => {
             createdAt: savedUser.createdAt
         });
 
+    } catch (error) {
+        return next(error);
+    }
+});
+
+router.post('/reset_password', async (req, res, next) => {
+    try {
+        if (!req.body.email || !req.body.password || !req.body.otp) {
+            throw { status: 400, message: 'Missing otp or email or password!' };
+        }
+        const user = await User.findOne({email: req.body.email}).select('name email otp is_verified').exec();
+        if (!user) {
+            throw { status: 400, message: 'User Not Found!' };
+        }
+
+        const otpObj = user.otp;
+        const timeDiff = (new Date() - new Date(otpObj.createdAt)) / (1000*60); // in mins
+        if ( timeDiff > 15 || req.body.otp !== otpObj.otp) {
+            throw { status: 400, message: 'OTP is invalid or has been expired, please try again' };
+        }
+        user.is_verified = true;
+        user.markModified('is_verified');
+
+        user.password = req.body.password;
+        user.markModified('password');
+
+        await user.save();
+        return res.json({success: 1});
     } catch (error) {
         return next(error);
     }
