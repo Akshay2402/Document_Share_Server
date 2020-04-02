@@ -14,9 +14,9 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/register', async (req, res, next) => {
     try {
-        // if (!req.body.name || !req.body.email || !req.body.password) {
-        //     throw { status: 400, message: 'Missing fields, Please fill all the details!' };
-        // }
+        if (!req.body.name || !req.body.email || !req.body.password) {
+            throw { status: 400, message: 'Missing fields, Please fill all the details!' };
+        }
         const otp = Math.floor(100000 + Math.random() * 900000);
         const userObj = {
             name: req.body.name,
@@ -30,10 +30,9 @@ router.post('/register', async (req, res, next) => {
         await mailer.sendMail([req.body.email], mailPayload);
 
         //save the user
-        // const userInstance = new User(userObj);
-        // const savedUser = await userInstance.save();
-        // return res.json(savedUser);
-        return res.json(userObj);
+        const userInstance = new User(userObj);
+        const savedUser = await userInstance.save();
+        return res.json(savedUser);
 
     } catch (error) {
         return next(error);
