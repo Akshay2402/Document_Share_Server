@@ -9,9 +9,12 @@ router.post('/login', async (req, res, next) => {
         if (!req.body.email || !req.body.password) {
             throw { status: 400, message: 'Missing email or password!' };
         }
-        const user = await User.findOne({email: req.body.email}).select('name email password is_verified is_online last_seen_at').exec();
+        const user = await User.findOne({email: req.body.email, is_verified: true}).select('name email password is_verified is_online last_seen_at').exec();
         if (!user) {
             throw { status: 400, message: 'User Not Found!' };
+        }
+        if (!user.is_verified) {
+            throw { status: 400, message: 'Please verify the OTP!' };
         }
         const isMatch = await user.authenticate(req.body.password);
         if (!isMatch) {
@@ -28,12 +31,43 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
+router.post('/resend_otp', async (req, res, next) => {
+    try {
+        if (!req.body.email) {
+            throw { status: 400, message: 'Missing email!' };
+        }
+        const user = await User.findOne({email: req.body.email}).select('name email otp is_verified').exec();
+        if (!user) {
+            throw { status: 400, message: 'User Not Found!' };
+        }
+        if (user.is_verified) {
+            throw { status: 400, message: 'User is Already Verified!' };
+        }
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        user.otp = {
+            otp,
+            createdAt: new Date()
+        };
+        user.markModified('otp');
+
+        const mailPayload = mailer.constructMailPayload(user.name, 'CREATE_USER', user.toObject());
+        await mailer.sendMail([req.body.email], mailPayload);
+        await user.save();
+        return res.json({success: 1});
+    } catch (error) {
+        return next(error);
+    }
+});
+
 router.post('/validate_otp', async (req, res, next) => {
     try {
         if (!req.body.email || !req.body.otp) {
             throw { status: 400, message: 'Missing email or OTP!' };
         }
         const user = await User.findOne({email: req.body.email}).select('otp is_verified').exec();
+        if (!user) {
+            throw { status: 400, message: 'User Not Found!' };
+        }
         const otpObj = user.otp;
         const timeDiff = (new Date() - new Date(otpObj.createdAt)) / (1000*60); // in mins
         if ( timeDiff > 15 || req.body.otp !== otpObj.otp) {
