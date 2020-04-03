@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 router.get('/', (req, res, next) => {
-    return res.json("Smooth and Awesome");
+    return res.json("Welcome to Document Sharer!");
 });
 
 module.exports = router;
