@@ -1,4 +1,4 @@
-# Document Share Server
+# Document Share Server  [![Actions Status](https://github.com/akshay9502/Document_Share_Server/workflows/Node%20CI/badge.svg)](https://github.com/akshay9502/Document_Share_Server/actions)
 A simple API to support the Document sharer web app. The repo contain basic API's, User authentication, CRUD on documents and document share. The aim of this is just showcase the document share functionality.
 
 
@@ -32,7 +32,10 @@ NodeJs: v10.0.0,
 Npm: 6.x
 winston Logger: 2.3.1
 winston-mongodb: 2.0.8
-Morgan Logger
+Morgan Logger,
+Mocha,
+Chai,
+supertest
 ```
 
 ## Licence
