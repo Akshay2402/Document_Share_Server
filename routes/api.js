@@ -3,7 +3,7 @@ api.includeRoutes = function (app) {
     const indexRoute = require('./index');
     const documents = require('./document');
     const authentication = require('./authentication');
-
+    const users = require('./user');
 
     function isAuthenticated(req, res, next) {
         if (!req.tokenVerified) {
@@ -26,6 +26,7 @@ api.includeRoutes = function (app) {
      * Protected Routes
      */
     app.use('/api/v1/*', isAuthenticated);
+    app.use('/api/v1/user', users);
     app.use('/api/v1/document', documents);
 };
 

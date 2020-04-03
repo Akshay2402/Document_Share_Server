@@ -47,6 +47,18 @@ function constructMailPayload(username, type, meta) {
             ].join("\n")
           };
           return payload_obj;
+    } else if (type === 'DOCUMENT_SHARE') {
+        let payload_obj = {
+            subject: `${meta.from} shared an document with you.`,
+            text: [
+              `Dear ${username},`,
+              `Greetings from Document Sharer\n`,
+              `${meta.from} shared an document with you. Please check it out.\n`,
+              `https://docsharerfront.herokuapp.com/\n`,
+              `Thank You!`
+            ].join("\n")
+          };
+          return payload_obj;
     } else {
         return {};
     }

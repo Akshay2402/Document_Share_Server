@@ -34,7 +34,11 @@ const UserSchema = new mongoose.Schema({
     last_seen_at: {
         type: Date,
         default: new Date()
-    }
+    },
+    documents: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Document'
+    }]
 }, { timestamps: true });
 
 
