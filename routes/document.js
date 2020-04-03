@@ -116,11 +116,12 @@ router.post('/share', async (req, res, next) => {
             throw { status: 400, message: 'This user is not registered!' };
         }
 
-        if (!user.documents) {
+        // As we have only one doc feature for this proj
+        // if (!user.documents) {
             user.documents = [req.body.doc_id];
-        } else {
-            user.documents.push(req.body.doc_id);
-        }
+        // } else {
+        //     user.documents.push(req.body.doc_id);
+        // }
         user.markModified('documents');
         await user.save();
 
