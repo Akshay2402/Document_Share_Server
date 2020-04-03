@@ -93,6 +93,12 @@ router.post('/register', async (req, res, next) => {
             throw { status: 400, message: "Invalid Email!" };
         }
 
+        // check if user already exists on same email
+        const user = await User.findOne({email: req.body.email}).lean().exec();
+        if (user) {
+            throw { status: 400, message: 'User already exists on same email!' };
+        }
+
         const otp = Math.floor(100000 + Math.random() * 900000);
         const userObj = {
             name: req.body.name,
