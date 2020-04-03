@@ -19,8 +19,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install and mocha_test
       run: |
-        mkdir logs
-        touch logs/errors.log
         npm ci
         npm test
       env:
