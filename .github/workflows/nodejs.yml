@@ -1,0 +1,37 @@
+name: Node CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install and mocha_test
+      run: |
+        mkdir logs
+        touch logs/errors.log
+        npm ci
+        npm test
+      env:
+        CI: true
+        ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+        PORT: ${{ secrets.PORT }}
+        SMTP_HOST: ${{ secrets.SMTP_HOST }}
+        SMTP_PORT: ${{ secrets.SMTP_PORT }}
+        SMTP_USER: ${{ secrets.SMTP_USER }}
+        SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        SMTP_FROM: ${{ secrets.SMTP_FROM }}
+        MONGOLAB_SILVER_URI: ${{ secrets.MONGOLAB_SILVER_URI }}
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
