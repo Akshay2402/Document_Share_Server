@@ -43,10 +43,12 @@ router.get('/', async (req, res, next) => {
 
         // assuming only one document right now as we are not giving creating new doc fuctionality
         // TODO: Later we will change it when applications scope increases
+        if (!user.documents || (user.documents && !user.documents.length)) {
+            return res.json({doc: {}, users: {}});
+        }
         const doc = user.documents[0];
-
         // get users who has been shared this document
-        let users = await User.find({documents: {$in: [doc._id]}})
+        let users = await User.find({documents: doc._id})
         .select('name email is_online last_seen_at')
         .lean().exec();
 
