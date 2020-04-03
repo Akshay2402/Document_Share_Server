@@ -52,6 +52,12 @@ router.get('/', async (req, res, next) => {
         .select('name email is_online last_seen_at')
         .lean().exec();
 
+        users = users.map((usr) => {
+            if (usr.is_online) {
+                delete usr.last_seen_at
+            }
+        });
+        
         return res.json({doc, users}); 
     } catch (error) {
         return next(error);
