@@ -68,11 +68,3 @@ module.exports = {
     sendMail,
     constructMailPayload
 };
-
-// "host": "smtp.gmail.com",
-// "port": "465",
-// "ssl": true,
-// "user": "autonest.jas@gmail.com",
-// "name": "Autonest",
-// "from": "autonest.jas@gmail.com",
-// "pass": "esupogu1979"
